@@ -65,7 +65,7 @@ def grid_values(grid):
     values = dict()
     index = 0
     while index < len(BOXES):
-        assign_value(values, BOXES[index], grid[index] if grid[index] != '.' else COLS)
+        values[BOXES[index]] = grid[index] if grid[index] != '.' else COLS
         index += 1
     return values
 
