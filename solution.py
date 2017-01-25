@@ -43,7 +43,7 @@ def naked_twins(values):
             continue
         for box in PEERS[box1] & PEERS[box2]:
             if len(values[box]) > 1:
-                values[box] = values[box].replace(values[box1][0], "").replace(values[box1][1], "")
+                assign_value(values, box, values[box].replace(values[box1][0], "").replace(values[box1][1], ""))
     return values
 
 
@@ -65,7 +65,7 @@ def grid_values(grid):
     values = dict()
     index = 0
     while index < len(BOXES):
-        values[BOXES[index]] = grid[index] if grid[index] != '.' else COLS
+        assign_value(values, BOXES[index], grid[index] if grid[index] != '.' else COLS)
         index += 1
     return values
 
@@ -89,7 +89,7 @@ def eliminate(values):
     only_one_value = [box for box in BOXES if len(values[box]) == 1]
     for box in only_one_value:
         for other_box in PEERS[box]:
-            values[other_box] = values[other_box].replace(values[box], "")
+            assign_value(values, other_box, values[other_box].replace(values[box], ""))
     return values
 
 
@@ -98,7 +98,7 @@ def only_choice(values):
         for val in COLS:
             box_with_val = [box for box in unit if val in values[box]]
             if len(box_with_val) == 1:
-                values[box_with_val[0]] = val
+                assign_value(values, box_with_val[0], val)
     return values
 
 
@@ -146,7 +146,7 @@ def search(values):
 
     for value in values[next_box]:
         new_values = values.copy()
-        new_values[next_box] = value
+        assign_value(new_values, next_box, value)
         possible_sol = search(new_values)
         if possible_sol is not None:
             return possible_sol
