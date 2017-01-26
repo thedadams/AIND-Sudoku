@@ -55,7 +55,30 @@ def naked_twins(values):
         # For all common peers, we remove the twin values.
         for box in PEERS[box1] & PEERS[box2]:
             if len(values[box]) > 1:
-                assign_value(values, box, values[box].replace(values[box1][0], "").replace(values[box1][1], ""))
+                assign_value(values, box, values[box].replace(
+                    values[box1][0], "").replace(values[box1][1], ""))
+    return values
+
+
+def hidden_twins(values):
+    """
+    Eliminate values using the hidden twins strategy.
+    Args:
+        values(dict): The soduko puzzle in dictionary form.
+    Returns:
+        the values dictionary with any hidden twins turned into naked twins.
+    """
+    # Start the same as only choice.
+    for unit in UNITLIST:
+        for digit in COLS:
+            with_digit = [b for b in unit if digit in values[b]]
+            # See if we found a possible hidden pair, and not a naked pair.
+            if len(with_digit) == 2 and (len(values[with_digit[0]]) > 2 or len(values[with_digit[1]]) > 2):
+                for digit2 in values[with_digit[0]]:
+                    if digit2 != digit and digit2 in values[with_digit[1]] and len([b for b in unit if digit2 in values[b]]) == 2:
+                        # We found a hidden pair so we turn it into a naked pair.
+                        assign_value(values, with_digit[0], digit + digit2)
+                        assign_value(values, with_digit[1], digit + digit2)
     return values
 
 
@@ -94,7 +117,8 @@ def display(values):
     width = 1 + max(len(values[s]) for s in values.keys())
     line = '+'.join(['-' * (width * 3)] * 3)
     for row in ROWS:
-        print(''.join(values[row + col].center(width) + ('|' if col in '36' else '') for col in COLS))
+        print(''.join(values[row + col].center(width) +
+                      ('|' if col in '36' else '') for col in COLS))
         if row in 'CF':
             print(line)
     print()
@@ -151,6 +175,8 @@ def reduce_puzzle(values):
         num_solved_before = len([box for box in values if len(values[box]) == 1])
         values = eliminate(values)
         values = only_choice(values)
+        # Add my hidden_twins implementation.
+        values = hidden_twins(values)
         values = naked_twins(values)
         # If we reduced any box down to no possibilities, then we don't have a solution.
         if any([len(val) == 0 for val in values.values()]):
@@ -213,6 +239,7 @@ def search(values):
             return possible_sol
     return None
 
+
 # Do this once now to avoid doing it many times.
 ROWS = 'ABCDEFGHI'
 COLS = '123456789'
@@ -221,7 +248,8 @@ ROW_UNITS = [cross(r, COLS) for r in ROWS]
 COL_UNITS = [cross(ROWS, c) for c in COLS]
 SQUARE_UNITS = [cross(rs, cs) for rs in ('ABC', 'DEF', 'GHI') for cs in ('123', '456', '789')]
 # The diagonal units.
-DIAGONAL_UNITS = [["".join(a) for a in zip(ROWS, COLS)], ["".join(a) for a in zip(ROWS, reversed(COLS))]]
+DIAGONAL_UNITS = [["".join(a) for a in zip(ROWS, COLS)], ["".join(a)
+                                                          for a in zip(ROWS, reversed(COLS))]]
 UNITLIST = ROW_UNITS + COL_UNITS + SQUARE_UNITS
 UNITS = dict((s, [u for u in UNITLIST if s in u]) for s in BOXES)
 PEERS = dict((s, set(sum(UNITS[s], [])) - set([s])) for s in BOXES)
