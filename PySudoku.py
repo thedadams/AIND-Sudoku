@@ -1,4 +1,7 @@
-import sys, os, random, pygame
+import sys
+import os
+import random
+import pygame
 sys.path.append(os.path.join("objects"))
 import SudokuSquare
 from GameResources import *
@@ -9,7 +12,6 @@ rows = 'ABCDEFGHI'
 
 def play(values_list):
     pygame.init()
-
 
     size = width, height = 700, 700
     screen = pygame.display.set_mode(size)
@@ -30,13 +32,19 @@ def play(values_list):
         startX, startY, editable, number = 0, 0, "N", 0
         for y in range(9):
             for x in range(9):
-                if x in (0, 1, 2):  startX = (x * 57) + 38
-                if x in (3, 4, 5):  startX = (x * 57) + 99
-                if x in (6, 7, 8):  startX = (x * 57) + 159
+                if x in (0, 1, 2):
+                    startX = (x * 57) + 38
+                if x in (3, 4, 5):
+                    startX = (x * 57) + 99
+                if x in (6, 7, 8):
+                    startX = (x * 57) + 159
 
-                if y in (0, 1, 2):  startY = (y * 57) + 35
-                if y in (3, 4, 5):  startY = (y * 57) + 100
-                if y in (6, 7, 8):  startY = (y * 57) + 165
+                if y in (0, 1, 2):
+                    startY = (y * 57) + 35
+                if y in (3, 4, 5):
+                    startY = (y * 57) + 100
+                if y in (6, 7, 8):
+                    startY = (y * 57) + 165
                 col = digits[y]
                 row = rows[x]
                 string_number = values[row + col]
@@ -44,7 +52,8 @@ def play(values_list):
                     number = None
                 else:
                     number = int(string_number)
-                theSquares.append(SudokuSquare.SudokuSquare(number, startX, startY, editable, x, y))
+                theSquares.append(SudokuSquare.SudokuSquare(
+                    number, startX, startY, editable, x, y))
 
         screen.blit(background_image, (0, 0))
         for num in theSquares:
@@ -53,6 +62,12 @@ def play(values_list):
         pygame.display.flip()
         pygame.display.update()
         clock.tick(5)
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
 
 
 if __name__ == "__main__":
