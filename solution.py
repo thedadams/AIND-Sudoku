@@ -74,6 +74,7 @@ def hidden_twins(values):
             with_digit = [b for b in unit if digit in values[b]]
             # See if we found a possible hidden pair, and not a naked pair.
             if len(with_digit) == 2 and (len(values[with_digit[0]]) > 2 or len(values[with_digit[1]]) > 2):
+                # Go through the digits in the first of the two boxes.
                 for digit2 in values[with_digit[0]]:
                     if digit2 != digit and digit2 in values[with_digit[1]] and len([b for b in unit if digit2 in values[b]]) == 2:
                         # We found a hidden pair so we turn it into a naked pair.
@@ -113,7 +114,7 @@ def display(values):
     Args:
         values(dict): The sudoku in dictionary form
     """
-    # Taken for the online course to avoid the calculations.
+    # Taken for the Udacity course to avoid the calculations.
     width = 1 + max(len(values[s]) for s in values.keys())
     line = '+'.join(['-' * (width * 3)] * 3)
     for row in ROWS:
@@ -241,6 +242,7 @@ def search(values):
 
 
 # Do this once now to avoid doing it many times.
+# Most of these was taken from the Udacity course.
 ROWS = 'ABCDEFGHI'
 COLS = '123456789'
 BOXES = cross(ROWS, COLS)

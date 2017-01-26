@@ -63,6 +63,9 @@ def play(values_list):
         pygame.display.update()
         clock.tick(5)
 
+    # This hack was given by @nilmagnum in the Slack channel.
+    # It keeps the pygame window up so we can see the final solution.
+    # enter ctrl-c to close window.
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
