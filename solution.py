@@ -115,14 +115,17 @@ def display(values):
         values(dict): The sudoku in dictionary form
     """
     # Taken for the Udacity course to avoid the calculations.
-    width = 1 + max(len(values[s]) for s in values.keys())
-    line = '+'.join(['-' * (width * 3)] * 3)
-    for row in ROWS:
-        print(''.join(values[row + col].center(width) +
-                      ('|' if col in '36' else '') for col in COLS))
-        if row in 'CF':
-            print(line)
-    print()
+    if values is None:
+        print("It seems we could not solve the puzzle.")
+    else:
+        width = 1 + max(len(values[s]) for s in values.keys())
+        line = '+'.join(['-' * (width * 3)] * 3)
+        for row in ROWS:
+            print(''.join(values[row + col].center(width) +
+                          ('|' if col in '36' else '') for col in COLS))
+            if row in 'CF':
+                print(line)
+        print()
 
 
 def eliminate(values):
