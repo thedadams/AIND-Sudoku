@@ -45,8 +45,8 @@ def play(values_list):
                     startY = (y * 57) + 100
                 if y in (6, 7, 8):
                     startY = (y * 57) + 165
-                col = digits[y]
-                row = rows[x]
+                col = digits[x]
+                row = rows[y]
                 string_number = values[row + col]
                 if len(string_number) > 1 or string_number == '' or string_number == '.':
                     number = None
